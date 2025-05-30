@@ -1,5 +1,5 @@
 import { getMovieById } from '@/api/movies'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { View, Text, ActivityIndicator, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -7,13 +7,17 @@ import { addMovieToWatchlist } from '@/api/watchlist';
 
 export default function MovieDetails() {
   const {id} = useLocalSearchParams()
+  const client = useQueryClient()
   const {data: movie, error, isLoading} = useQuery({ 
     queryKey: ['movies', id], 
     queryFn: () => getMovieById(id)
   })
 
   const {mutate} = useMutation({
-    mutationFn: () => addMovieToWatchlist(id)
+    mutationFn: () => addMovieToWatchlist(id),
+    onSuccess: () => {
+      client.invalidateQueries(['watchlist'])
+    }
   })
 
   if(isLoading) {

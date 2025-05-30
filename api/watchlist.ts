@@ -26,3 +26,24 @@ export const addMovieToWatchlist = async (movieId: string) => {
     throw error
   }
 }
+
+export const getMovieWatchlist = async () => {
+  const url = `${BASE_URL}account/11252289/watchlist/movies?language=en-US&page=1&sort_by=created_at.desc`;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${JWT_TOKEN}`
+    }
+  };
+
+  try {
+    const response = await fetch(url, options)
+    const json = await response.json()
+    console.log(json.results)
+    return json.results
+  } catch (error) {
+    throw error
+  }
+}
