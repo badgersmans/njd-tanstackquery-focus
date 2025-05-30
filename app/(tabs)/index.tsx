@@ -1,23 +1,31 @@
-import { StyleSheet } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { getTopRatedMovies } from '@/api/movies';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 export default function MovieScreen() {
-  const [movies, setMovies] = useState([])
+  const {data: movies, error, isLoading} = useQuery({ 
+    queryKey: ['movies'], 
+    queryFn: getTopRatedMovies 
+  })
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      const movies = await getTopRatedMovies();
-      console.log(movies)
-      setMovies(movies)
-    }
-    fetchMovies();
-  }, [])
+  if(isLoading) {
+    return <ActivityIndicator />
+  }
+  if(error) {
+    console.log(error)
+  }
 
   return (
     <View style={styles.container}>
-      <Text>sdss</Text>
+      <FlatList 
+        data={movies}
+        renderItem={({item}) => (
+          <View>
+            <Text>{item.title}</Text>
+          </View>
+        )}
+      />
     </View>
   );
 }

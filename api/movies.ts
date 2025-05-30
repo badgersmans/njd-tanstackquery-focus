@@ -11,8 +11,8 @@ export const getTopRatedMovies = async () => {
   try {
     const response = await fetch(url, options)
     const json = await response.json()
-    console.log(json.results)
-    return json
+    // console.log(json.results)
+    return json.results
   } catch (error) {
     console.log(error)
   }
