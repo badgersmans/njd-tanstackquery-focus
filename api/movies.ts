@@ -6,8 +6,9 @@ const headers = {
   Authorization: `Bearer ${JWT_TOKEN}`
 }
 
-export const getTopRatedMovies = async () => {
-  const url = `${BASE_URL}movie/top_rated?language=en-US&page=1`;
+export const getTopRatedMovies = async (page: number = 1) => {
+  console.log(page)
+  const url = `${BASE_URL}movie/top_rated?language=en-US&page=${page}`;
   const options = {
     method: 'GET',
     headers

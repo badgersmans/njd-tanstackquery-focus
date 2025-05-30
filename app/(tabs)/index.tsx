@@ -1,13 +1,15 @@
 import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { getTopRatedMovies } from '@/api/movies';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import MovieListItem from '@/components/MovieListItem';
 
 export default function MovieScreen() {
-  const {data: movies, error, isLoading} = useQuery({ 
+  const {data, error, isLoading, fetchNextPage} = useInfiniteQuery({ 
     queryKey: ['movies'], 
-    queryFn: getTopRatedMovies 
+    queryFn: ({pageParam}) => getTopRatedMovies(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => pages.length + 1,
   })
 
   if(isLoading) {
@@ -16,6 +18,9 @@ export default function MovieScreen() {
   if(error) {
     console.log(error)
   }
+
+  console.log(data)
+  const movies = data?.pages.flat();
 
   return (
     <View>
@@ -27,6 +32,9 @@ export default function MovieScreen() {
         numColumns={2}
         contentContainerStyle={styles.container}
         columnWrapperStyle={styles.columnStyles}
+        onEndReached={() => {
+          fetchNextPage()
+        }}
       />
     </View>
   );
