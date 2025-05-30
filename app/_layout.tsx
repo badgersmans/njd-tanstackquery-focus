@@ -8,6 +8,8 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useSyncQueriesExternal } from "react-query-external-sync";
+import { Platform } from "react-native";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -40,6 +42,14 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useSyncQueriesExternal({
+    queryClient,
+    socketURL: "http://localhost:42831", // Default port for React Native DevTools
+    deviceName: Platform?.OS || "web", // Platform detection
+    platform: Platform?.OS || "web", // Use appropriate platform identifier
+    deviceId: Platform?.OS || "web", // Use a PERSISTENT identifier (see note below)
+  });
 
   if (!loaded) {
     return null;
