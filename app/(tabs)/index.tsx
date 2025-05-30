@@ -2,6 +2,7 @@ import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { getTopRatedMovies } from '@/api/movies';
 import { useQuery } from '@tanstack/react-query';
+import MovieListItem from '@/components/MovieListItem';
 
 export default function MovieScreen() {
   const {data: movies, error, isLoading} = useQuery({ 
@@ -17,14 +18,15 @@ export default function MovieScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View>
       <FlatList 
         data={movies}
         renderItem={({item}) => (
-          <View>
-            <Text>{item.title}</Text>
-          </View>
+          <MovieListItem movie={item} />
         )}
+        numColumns={2}
+        contentContainerStyle={styles.container}
+        columnWrapperStyle={styles.columnStyles}
       />
     </View>
   );
@@ -32,8 +34,10 @@ export default function MovieScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    gap: 10,
+    padding: 5
   },
+  columnStyles: {
+    gap: 10
+  }
 });
