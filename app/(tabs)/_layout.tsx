@@ -1,8 +1,11 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {
+  MaterialIcons, 
+  FontAwesome, 
+  MaterialCommunityIcons
+} from '@expo/vector-icons';
+
 import { Link, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
-
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
@@ -29,29 +32,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          title: 'Movies',
+          tabBarIcon: ({ color }) => <MaterialIcons name="local-movies" size={24} color={color} />,
         }}
       />
+
       <Tabs.Screen
         name="two"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Watch List',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="eye-outline" size={24} color={color} />,
         }}
       />
     </Tabs>
